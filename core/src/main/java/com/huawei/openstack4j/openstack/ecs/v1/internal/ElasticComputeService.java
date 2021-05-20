@@ -41,4 +41,13 @@ public class ElasticComputeService extends BaseElasticComputeServices implements
 	public CloudServerV2Service serversV2() {
 		return Apis.get(CloudServerV2Service.class);
 	}
+
+	public TagService tags() {
+		return Apis.get(TagService.class);
+	}
+
+	public InterfaceService interfaces() {
+		return Apis.get(InterfaceService.class);
+	}
+
 }

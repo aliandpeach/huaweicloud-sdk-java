@@ -29,12 +29,13 @@ import com.huawei.openstack4j.openstack.ecs.v1_1.domain.SchedulerHints;
 import com.huawei.openstack4j.openstack.ecs.v1_1.domain.ServerCreate;
 import com.huawei.openstack4j.openstack.ecs.v1_1.domain.ServerExtendParam;
 import com.huawei.openstack4j.openstack.ecs.v1_1.domain.AsyncServerRespEntity;
+import com.huawei.openstack4j.openstack.ecs.v1_1.domain.FloatingIPExtendParam;
 
 public class CloudServer {
 	public static void main(String[] args) {
 		
 		// Using credentials for authentication
-		String authUrl = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"; //endpoint Url
+		String authUrl = "https://iam.XXX.YYY.com/v3"; //endpoint Url
 		String user = "xxxxxx"; //username
 		String password = "xxxxxx"; //password
 		String projectId = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"; //projectid
@@ -56,9 +57,10 @@ public class CloudServer {
 		String userData_org = "#!/bin/bash \r\n echo 'root:xxxxx' | chpasswd ;";
 		byte[] userData_byte = userData_org.getBytes();
 		String userData = new BASE64Encoder().encode(userData_byte);
-		
+
 		Bandwidth bandwidth = Bandwidth.builder().size(10).shareType(ShareType.PER).chargeMode(null).build();
-		FloatingIPCreate FIPbuild = FloatingIPCreate.builder().ipType(IpType.BGP).bandwidth(bandwidth).build();
+		FloatingIPExtendParam extendparam = FloatingIPExtendParam.builder().chargingMode(ServerChargingMode.postPaid).build();
+		FloatingIPCreate FIPbuild = FloatingIPCreate.builder().ipType(IpType.BGP).bandwidth(bandwidth).extendparam(extendparam).build();
 		
 		String group = "ae089094-087b-4c39-ba98-f1862d5e45b1";
 		
@@ -87,8 +89,29 @@ public class CloudServer {
 		//create prepaid server
 		AsyncServerRespEntity rep1 = os.ecsV1_1().servers().create(creation1);
 		if (null != rep1) {
-			System.out.println("create server success, orderid = " + rep1.getOrderId());
-			System.out.println("serverIds = " + rep1.getServerIds());
+			Job job = os.ecs().jobs().get(rep1.getJobId());
+			while (!"SUCCESS".equals(job.getStatus()) && !"FAIL".equals(job.getStatus())) {
+				try {
+					Thread.sleep(8000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println("jobStatus" + job.getStatus());
+				job = os.ecs().jobs().get(rep1.getJobId());
+			}
+			List<SubJob> subJobList = job.getEntities().getSubJobs();
+			List<String> successServers = new ArrayList<>();
+			List<String> failServers = new ArrayList<>();
+			for (SubJob subJob : subJobList) {
+				if ("SUCCESS".equals(subJob.getStatus())) {
+					successServers.add(subJob.getEntities().getServerId());
+				} else {
+					failServers.add(subJob.getEntities().getServerId());
+				}
+			}
+			System.out.println("create server success, jobId = " + rep1.getJobId());
+			System.out.println("success servers=" + successServers);
+			System.out.println("fail servers=" + failServers);
 		} else {
 			System.out.println("create server failed");
 		}
@@ -97,7 +120,10 @@ public class CloudServer {
 		String newFlavorId = "s3.2xlarge.4";
 		String serverId = "d64db293-1937-4816-9e34-a99de8cd8fdb";
 		ResizeServer resize = ResizeServer.builder().flavorRef(newFlavorId).build();
+		// Stop server first
 		os.compute().servers().action(serverId, Action.STOP);
+		// Use the waitForServerStatus function to query the server status until the server is SHUTOFF.
+		// The timeout for this operation is 3 minutes.
 		os.compute().servers().waitForServerStatus(serverId, Status.SHUTOFF, 3, TimeUnit.MINUTES);
 		AsyncRespEntity resizeJobId = os.ecsV1_1().servers().resize(resize, serverId);
 		if (null != resizeJobId) {

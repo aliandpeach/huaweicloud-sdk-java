@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.huawei.openstack4j.openstack.identity.v3.domain;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,21 @@ public class KeystoneRole implements Role {
     @JsonProperty("domain_id")
     private String domainId;
     private Map<String, String> links;
+    @JsonProperty("display_name")
+    private String displayName;
+    private String type;
+    private String catalog;
+    private String flag;
+    private String description;
+    private Map<String, Object> policy;
+    @JsonProperty("created_time")
+    private String createdTime;
+    @JsonProperty("description_cn")
+    private String descriptionCn;
+    @JsonProperty("updated_time")
+    private String updatedTime;
+
+
 
     @Override
     public RoleBuilder toBuilder() {
@@ -84,6 +100,80 @@ public class KeystoneRole implements Role {
         return links;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getCatalog() {
+        return catalog;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFlag() {
+        return flag;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescriptionCn() {
+        return descriptionCn;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, Object> getPolicy() {
+        return policy;
+    }
+
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).omitNullValues()
@@ -91,6 +181,15 @@ public class KeystoneRole implements Role {
                 .add("name", name)
                 .add("domain_id", domainId)
                 .add("links", links)
+                .add("displayName", displayName)
+                .add("type", type)
+                .add("catalog", catalog)
+                .add("flag", flag)
+                .add("description", description)
+                .add("descriptionCn", descriptionCn)
+                .add("updatedTime", updatedTime)
+                .add("createdTime", createdTime)
+                .add("policy", policy)
                 .toString();
     }
 
@@ -138,6 +237,60 @@ public class KeystoneRole implements Role {
         @Override
         public RoleBuilder links(Map<String, String> links) {
             model.links = links;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder displayName(String displayName) {
+            model.displayName = displayName;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder type(String type) {
+            model.type = type;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder catalog(String catalog) {
+            model.catalog = catalog;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder flag(String flag) {
+            model.flag = flag;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder description(String description) {
+            model.description = description;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder updatedTime(String updatedTime) {
+            model.updatedTime = updatedTime;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder createdTime(String createdTime) {
+            model.createdTime = createdTime;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder descriptionCn(String descriptionCn) {
+            model.descriptionCn = descriptionCn;
+            return this;
+        }
+
+        @Override
+        public RoleBuilder policy(Map<String, Object> policy) {
+            model.policy = policy;
             return this;
         }
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * 	Copyright 2017 HuaWei Tld                                     
+ * 	Copyright 2017 Huawei Technologies Co., Ltd.
  * 	                                                                                 
  * 	Licensed under the Apache License, Version 2.0 (the "License"); you may not      
  * 	use this file except in compliance with the License. You may obtain a copy of    
@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.huawei.openstack4j.model.ModelEntity;
+import com.huawei.openstack4j.openstack.networking.domain.ext.ListItem;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -70,4 +71,7 @@ public class InstanceConfig implements ModelEntity {
 
 	@JsonProperty("user_data")
 	private String userData;
+
+	@JsonProperty("security_groups")
+	private List<ListItem> securityGroups;
 }

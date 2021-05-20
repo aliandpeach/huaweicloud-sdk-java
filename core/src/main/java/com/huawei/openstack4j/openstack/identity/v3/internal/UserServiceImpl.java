@@ -111,6 +111,7 @@ public class UserServiceImpl extends BaseOpenStackService implements UserService
      * {@inheritDoc}
      */
     @Override
+    @Deprecated
     public User create(String domainId, String name, String password, String email, boolean enabled) {
         checkNotNull(domainId);
         checkNotNull(name);
@@ -118,6 +119,19 @@ public class UserServiceImpl extends BaseOpenStackService implements UserService
         checkNotNull(email);
         checkNotNull(enabled);
         return create(KeystoneUser.builder().domainId(domainId).name(name).password(password).email(email).enabled(enabled).build());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Deprecated
+    public User create(String domainId, String name, String password, String email) {
+        checkNotNull(domainId);
+        checkNotNull(name);
+        checkNotNull(password);
+        checkNotNull(email);
+        return create(KeystoneUser.builder().domainId(domainId).name(name).password(password).email(email).build());
     }
 
     /**

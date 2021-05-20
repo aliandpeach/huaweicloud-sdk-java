@@ -19,6 +19,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.huawei.openstack4j.core.transport.ClientConstants.*;
 
 import java.util.List;
+import java.util.Map;
 
 import com.huawei.openstack4j.api.identity.v3.RoleService;
 import com.huawei.openstack4j.model.common.ActionResponse;
@@ -107,6 +108,20 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
     @Override
     public List<? extends Role> list() {
         return get(Roles.class, uri("/roles")).execute().getList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<? extends Role> list(Map<String, String> filteringParams) {
+        Invocation<Roles> flavorInvocation = get(Roles.class, uri("/roles"));
+        if (filteringParams != null) {
+            for (Map.Entry<String, String> entry : filteringParams.entrySet()) {
+                flavorInvocation = flavorInvocation.param(entry.getKey(), entry.getValue());
+            }
+        }
+        return flavorInvocation.execute().getList();
     }
 
     /**
@@ -206,4 +221,11 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
         return head(ActionResponse.class, uri("/domains/%s/groups/%s/roles/%s", domainId, groupId, roleId)).execute();
     }
 
+    @Override
+    public ActionResponse grantGroupAllProjectsRole(String domainId, String groupId, String roleId) {
+        checkNotNull(domainId);
+        checkNotNull(groupId);
+        checkNotNull(roleId);
+        return put(ActionResponse.class, uri("OS-INHERIT/domains/%s/groups/%s/roles/%s/inherited_to_projects", domainId, groupId, roleId)).execute();
+    }
 }

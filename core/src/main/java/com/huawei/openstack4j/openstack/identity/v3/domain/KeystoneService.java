@@ -47,7 +47,7 @@ public class KeystoneService implements Service, Comparable<Service> {
     @JsonProperty
     private List<KeystoneEndpoint> endpoints;
     private String description;
-    private Boolean enabled = true;
+    private Boolean enabled;
 
     private Map<String, String> links;
 
@@ -126,6 +126,9 @@ public class KeystoneService implements Service, Comparable<Service> {
         this.enabled = enabled;
     }
 
+    public void setEndpoints(List<KeystoneEndpoint> endpoints) {
+        this.endpoints = endpoints;
+    }
     /**
      * {@inheritDoc}
      */
@@ -144,6 +147,7 @@ public class KeystoneService implements Service, Comparable<Service> {
                 .add("version", version)
                 .add("enabled", enabled)
                 .add("links", links)
+                .add("endpoints", endpoints)
                 .toString();
     }
 

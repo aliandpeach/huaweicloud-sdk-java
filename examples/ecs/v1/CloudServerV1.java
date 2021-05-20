@@ -20,7 +20,9 @@ import com.huawei.openstack4j.openstack.ecs.v1.contants.NetworkChargingMode;
 import com.huawei.openstack4j.openstack.ecs.v1.contants.ShareType;
 import com.huawei.openstack4j.openstack.ecs.v1.contants.VolumeType;
 import com.huawei.openstack4j.openstack.ecs.v1.domain.Bandwidth;
+import com.huawei.openstack4j.openstack.ecs.v1.domain.CloudServer;
 import com.huawei.openstack4j.openstack.ecs.v1.domain.Job;
+import com.huawei.openstack4j.openstack.ecs.v1.domain.ResetPassword;
 import com.huawei.openstack4j.openstack.ecs.v1.domain.SubJob;
 import com.huawei.openstack4j.openstack.ecs.v1.domain.CloudServer.CloudServers;
 import com.huawei.openstack4j.openstack.ecs.v1.domain.DataVolume;
@@ -39,7 +41,7 @@ public class CloudServerV1 {
 	public static void main(String[] args) throws InterruptedException {
 
 		// Using credentials for authentication
-		String authUrl = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; //endpoint Url
+		String authUrl = "https://iam.XXX.YYY.com/v3"; //endpoint Url
 		String user = "xxxxx"; //username
 		String password = "xxxxx"; //password
 		String projectId = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; //projectId
@@ -184,7 +186,10 @@ public class CloudServerV1 {
 		String newFlavorId = "s2.medium.2";
 		String serverId = "ac91c721-9e8e-4147-83d9-b4f07ad607ed";
 		ResizeServer resize = ResizeServer.builder().flavorRef(newFlavorId).build();
+		// Stop server first
 		os.compute().servers().action(serverId, Action.STOP);
+		// Use the waitForServerStatus function to query the server status until the server is SHUTOFF.
+		// The timeout for this operation is 3 minutes.
 		os.compute().servers().waitForServerStatus(serverId, Status.SHUTOFF, 3, TimeUnit.MINUTES);
 		String resizeJobId = os.ecs().servers().resize(resize, serverId);
 		if (null != resizeJobId) {
@@ -195,16 +200,78 @@ public class CloudServerV1 {
 
 		//get count and list of server
 		CloudServers cloudServer = os.ecs().servers().listWithCount();
-		System.out.println("server count: " + cloudServer.getCount());
-		System.out.println("server list: " + cloudServer.getServers());
+		if (cloudServer != null){
+			System.out.println("server count: " + cloudServer.getCount());
+			System.out.println("server list: " + cloudServer.getServers());
+			if (cloudServer.getCount()>0){
+				for (CloudServer nowCloudServer:cloudServer.getServers()) {
+					//get cloud server schedulerHints
+					System.out.println("schedulerHints: " + nowCloudServer.getSchedulerHints());
+				}
+			}
+		}
 
 		//get count and list of server with parameters
 		Map<String, String> filter = new HashMap<String, String>();
 		filter.put("offset", "0");
 		filter.put("status", "ACTIVE");
 		CloudServers serverObjects = os.ecs().servers().listWithCount(filter);
-		System.out.println("server count: " + serverObjects.getCount());
-		System.out.println("server list: " + serverObjects.getServers());
+		if (serverObjects != null){
+			System.out.println("server count: " + serverObjects.getCount());
+			System.out.println("server list: " + serverObjects.getServers());
+			if (serverObjects.getCount()>0){
+				for (CloudServer nowCloudServer:serverObjects.getServers()) {
+					//get cloud server schedulerHints
+					System.out.println("schedulerHints: " + nowCloudServer.getSchedulerHints());
+				}
+			}
+		}
+
+		//Query cloud server details list
+		List<CloudServer> cloudServerList = os.ecs().servers().list();
+		if (cloudServerList != null){
+			System.out.println("server list: " + cloudServerList);
+			if (cloudServerList.size()>0){
+				for (CloudServer nowCloudServer:cloudServerList) {
+					//get cloud server schedulerHints
+					System.out.println("schedulerHints: " + nowCloudServer.getSchedulerHints());
+				}
+			}
+		}
+
+		//Query cloud server details list by filteringParams
+		Map<String, String> filteringParams = new HashMap<String, String>();
+		filteringParams.put("offset", "0");
+		filteringParams.put("status", "ACTIVE");
+		List<CloudServer> filterServerCloudList = os.ecs().servers().list(filteringParams);
+		if (filterServerCloudList != null){
+			System.out.println("server list: " + filterServerCloudList);
+			if (filterServerCloudList.size()>0){
+				for (CloudServer nowCloudServer:filterServerCloudList) {
+					//get cloud server schedulerHints
+					System.out.println("schedulerHints: " + nowCloudServer.getSchedulerHints());
+				}
+			}
+		}
+
+		//Query cloud server detail
+		String exitSchedulerHintsServerId = "xxxxxxxxxxxxxxxxxxxxxxxx";
+		String notExitSchedulerHintsServerId = "xxxxxxxxxxxxxxxxxxxxxxxx";
+		CloudServer cloudServerDetail = os.ecs().servers().get(notExitSchedulerHintsServerId);
+		if (cloudServerDetail != null){
+			System.out.println("server: " + cloudServerDetail);
+			//get cloud server schedulerHints
+			System.out.println("schedulerHints: " + cloudServerDetail.getSchedulerHints());
+		}
+
+		//cloud server reset password
+		ResetPassword resetPassword = ResetPassword.builder().newPassword("xxxx").build();
+		ActionResponse resetPwdActionResponse = os.ecs().servers().resetPassword(serverId, resetPassword);
+		if (resetPwdActionResponse.isSuccess()) {
+			System.out.println("reset password success");
+		} else {
+			System.out.println("reset password failed");
+		}
 
 		//get autorecovery configuration of server
 		SupportAutoRecovery autoRecoveryConfig = os.ecs().servers().getAutoRecovery(serverId);

@@ -242,6 +242,16 @@ import com.huawei.openstack4j.openstack.artifact.internal.ToscaTemplatesArtifact
 import com.huawei.openstack4j.openstack.barbican.internal.BarbicanServiceImpl;
 import com.huawei.openstack4j.openstack.barbican.internal.ContainerServiceImpl;
 import com.huawei.openstack4j.openstack.bms.v1.internal.BareMetaService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.BillService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.BusinessSupportSystemService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.CustomerManagementService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.UtilitiesService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.EnquiryService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.PeriodOrderService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.PayPerUseResourceService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.RealnameAuthService;
+import com.huawei.openstack4j.openstack.bss.v1.internal.PeriodResourceService;
+import com.huawei.openstack4j.openstack.bssintl.v1.internal.BusinessSupportSystemIntlService;
 import com.huawei.openstack4j.openstack.cdn.v1.internal.CdnServices;
 import com.huawei.openstack4j.openstack.cdn.v1.internal.LogService;
 import com.huawei.openstack4j.openstack.cdn.v1.internal.StatisticService;
@@ -299,10 +309,16 @@ import com.huawei.openstack4j.openstack.dns.v2.internal.RecordsetServiceImpl;
 import com.huawei.openstack4j.openstack.dss.v1.internal.DssService;
 import com.huawei.openstack4j.openstack.dss.v1.internal.PoolService;
 import com.huawei.openstack4j.openstack.ecs.v1.internal.ElasticComputeService;
+import com.huawei.openstack4j.openstack.eps.v1.internal.EPManagementService;
+import com.huawei.openstack4j.openstack.eps.v1.internal.EPService;
 import com.huawei.openstack4j.openstack.fgs.v1.internal.FunctionGraphService;
 import com.huawei.openstack4j.openstack.fgs.v1.internal.FunctionService;
 import com.huawei.openstack4j.openstack.fgs.v1.internal.TriggerService;
 import com.huawei.openstack4j.openstack.fgs.v1.internal.VersionsService;
+import com.huawei.openstack4j.openstack.fgs.v2.internal.FunctionGraphV2Service;
+import com.huawei.openstack4j.openstack.fgs.v2.internal.FunctionV2Service;
+import com.huawei.openstack4j.openstack.fgs.v2.internal.TriggerV2Service;
+import com.huawei.openstack4j.openstack.fgs.v2.internal.VersionsV2Service;
 import com.huawei.openstack4j.openstack.gbp.internal.ExternalPolicyServiceImpl;
 import com.huawei.openstack4j.openstack.gbp.internal.ExternalSegmentServiceImpl;
 import com.huawei.openstack4j.openstack.gbp.internal.GbpServiceImpl;
@@ -323,6 +339,8 @@ import com.huawei.openstack4j.openstack.heat.internal.ResourcesServiceImpl;
 import com.huawei.openstack4j.openstack.heat.internal.SoftwareConfigServiceImpl;
 import com.huawei.openstack4j.openstack.heat.internal.StackServiceImpl;
 import com.huawei.openstack4j.openstack.heat.internal.TemplateServiceImpl;
+import com.huawei.openstack4j.openstack.iam.internal.AgencyService;
+import com.huawei.openstack4j.openstack.iam.internal.CustomRoleService;
 import com.huawei.openstack4j.openstack.iam.internal.IamService;
 import com.huawei.openstack4j.openstack.iam.internal.SecuritytokenService;
 import com.huawei.openstack4j.openstack.identity.v2.internal.ServiceManagerServiceImpl;
@@ -430,6 +448,11 @@ import com.huawei.openstack4j.openstack.networking.internal.ext.LoadBalancerV2Se
 import com.huawei.openstack4j.openstack.networking.internal.ext.MemberServiceImpl;
 import com.huawei.openstack4j.openstack.networking.internal.ext.NetQuotaServiceImpl;
 import com.huawei.openstack4j.openstack.networking.internal.ext.VipServiceImpl;
+import com.huawei.openstack4j.openstack.rds.v3.domain.Backup;
+import com.huawei.openstack4j.openstack.rds.v3.internal.BackupsAndRestoreService;
+import com.huawei.openstack4j.openstack.rds.v3.internal.InstanceManageService;
+import com.huawei.openstack4j.openstack.rds.v3.internal.ParamConfigService;
+import com.huawei.openstack4j.openstack.rds.v3.internal.RdsService;
 import com.huawei.openstack4j.openstack.scaling.internal.AutoScalingActivityLogServiceImpl;
 import com.huawei.openstack4j.openstack.scaling.internal.AutoScalingConfigServiceImpl;
 import com.huawei.openstack4j.openstack.scaling.internal.AutoScalingGroupInstanceServiceImpl;
@@ -543,13 +566,21 @@ public class DefaultAPIProvider implements APIProvider {
 		bind(com.huawei.openstack4j.api.identity.v3.VersionService.class, VersionServiceImpl.class);
 		bind(IamService.class, IamService.class);
 		bind(SecuritytokenService.class, SecuritytokenService.class);
+		bind(com.huawei.openstack4j.openstack.iam.internal.UserService.class, com.huawei.openstack4j.openstack.iam.internal.UserService.class);
+		bind(com.huawei.openstack4j.openstack.iam.internal.ProjectService.class, com.huawei.openstack4j.openstack.iam.internal.ProjectService.class);
+        bind(com.huawei.openstack4j.openstack.iam.internal.CredentialService.class, com.huawei.openstack4j.openstack.iam.internal.CredentialService.class);
+        bind(CustomRoleService.class, CustomRoleService.class);
+        bind(AgencyService.class, AgencyService.class);
 
-		// tms
+
+        // tms
 		bind(TagManagementService.class, TagManagementService.class);
 		bind(TagService.class, TagService.class);
 		// new ecs v1
 		bind(ElasticComputeService.class, ElasticComputeService.class);
 		bind(com.huawei.openstack4j.openstack.ecs.v1.internal.JobService.class, com.huawei.openstack4j.openstack.ecs.v1.internal.JobService.class);
+		bind(com.huawei.openstack4j.openstack.ecs.v1.internal.TagService.class, com.huawei.openstack4j.openstack.ecs.v1.internal.TagService.class);
+        bind(com.huawei.openstack4j.openstack.ecs.v1.internal.InterfaceService.class, com.huawei.openstack4j.openstack.ecs.v1.internal.InterfaceService.class);
 		bind(com.huawei.openstack4j.openstack.ecs.v1_1.internal.ElasticComputeService.class, com.huawei.openstack4j.openstack.ecs.v1_1.internal.ElasticComputeService.class);
 		bind(com.huawei.openstack4j.openstack.ecs.v1.internal.CloudServerService.class, com.huawei.openstack4j.openstack.ecs.v1.internal.CloudServerService.class);
 		bind(com.huawei.openstack4j.openstack.ecs.v1_1.internal.CloudServerService.class, com.huawei.openstack4j.openstack.ecs.v1_1.internal.CloudServerService.class);
@@ -795,7 +826,7 @@ public class DefaultAPIProvider implements APIProvider {
 		bind(AutoScalingPolicyService.class, AutoScalingPolicyServiceImpl.class);
 		bind(AutoScalingActivityLogService.class, AutoScalingActivityLogServiceImpl.class);
 		bind(AutoScalingQuotaService.class, AutoScalingQuotaServiceImpl.class);
-		bind(AutoScalingLifecycleHookService.class, AutoScalingLifecycleHookServiceImpl.class);		
+		bind(AutoScalingLifecycleHookService.class, AutoScalingLifecycleHookServiceImpl.class);
 		bind(AutoScalingTagService.class, AutoScalingTagServiceImpl.class);
 		bind(AutoScalingInformService.class, AutoScalingInfromServiceImpl.class);
 		
@@ -867,7 +898,11 @@ public class DefaultAPIProvider implements APIProvider {
 		bind(com.huawei.openstack4j.openstack.cdn.v1.internal.DomainService.class,com.huawei.openstack4j.openstack.cdn.v1.internal.DomainService.class);
 		bind(StatisticService.class,StatisticService.class);
 		bind(LogService.class,LogService.class);
-		
+
+        //vpc v3
+        bind(com.huawei.openstack4j.openstack.vpc.v3.internal.VirtualPrivateCloudService.class, com.huawei.openstack4j.openstack.vpc.v3.internal.VirtualPrivateCloudService.class);
+        bind(com.huawei.openstack4j.openstack.vpc.v3.internal.SecurityGroupService.class, com.huawei.openstack4j.openstack.vpc.v3.internal.SecurityGroupService.class);
+
 		//vpc v2
 		bind(VirtualPrivateCloudService.class, VirtualPrivateCloudService.class);
 		bind(PublicIpService.class, PublicIpService.class);
@@ -893,10 +928,47 @@ public class DefaultAPIProvider implements APIProvider {
 		bind(TriggerService.class, TriggerService.class);
 		bind(VersionsService.class, VersionsService.class);
 
+        bind(FunctionGraphV2Service.class, FunctionGraphV2Service.class);
+        bind(FunctionV2Service.class, FunctionV2Service.class);
+        bind(TriggerV2Service.class, TriggerV2Service.class);
+        bind(VersionsV2Service.class, VersionsV2Service.class);
+
         // pool v1
         bind(DssService.class, DssService.class);
         bind(PoolService.class, PoolService.class);
 
+        //bssintlV1 service
+        bind(BusinessSupportSystemIntlService.class, BusinessSupportSystemIntlService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.CustomerManagementService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.CustomerManagementService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.UtilitiesService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.UtilitiesService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.BillService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.BillService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.EnquiryService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.EnquiryService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.RealnameAuthService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.RealnameAuthService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.PeriodOrderService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.PeriodOrderService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.PeriodResourceService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.PeriodResourceService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.PayPerUseResourceService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.PayPerUseResourceService.class);
+        bind(com.huawei.openstack4j.openstack.bssintl.v1.internal.CustomerCreditService.class, com.huawei.openstack4j.openstack.bssintl.v1.internal.CustomerCreditService.class);
+
+        //bssV1 service
+        bind(BusinessSupportSystemService.class, BusinessSupportSystemService.class);
+        bind(CustomerManagementService.class, CustomerManagementService.class);
+        bind(UtilitiesService.class, UtilitiesService.class);
+        bind(BillService.class, BillService.class);
+        bind(EnquiryService.class, EnquiryService.class);
+        bind(RealnameAuthService.class, RealnameAuthService.class);
+        bind(PeriodOrderService.class, PeriodOrderService.class);
+        bind(PeriodResourceService.class, PeriodResourceService.class);
+        bind(PayPerUseResourceService.class, PayPerUseResourceService.class);
+
+        //eps
+        bind(EPManagementService.class, EPManagementService.class);
+        bind(EPService.class, EPService.class);
+
+        //rds
+        bind(RdsService.class, RdsService.class);
+        bind(InstanceManageService.class, InstanceManageService.class);
+        bind(ParamConfigService.class, ParamConfigService.class);
+        bind(BackupsAndRestoreService.class, BackupsAndRestoreService.class);
 	}
 
 	/**

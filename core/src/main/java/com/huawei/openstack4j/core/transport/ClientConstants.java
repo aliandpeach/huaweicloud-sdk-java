@@ -86,6 +86,13 @@ public final class ClientConstants {
     public static final String PATH_SERVICE_CATALOGS = "auth/catalog";
     public static final String PATH_TENANTS = "/tenants";
     public static final String PATH_ARTIFACTS = "/artifacts";
+    public static final String PATH_IAM_USERS = "/OS-USER/users";
+    public static final String PATH_IAM_INFO = "/info";
+    public static final String PATH_IAM_CREDENTIALS = "/OS-CREDENTIAL";
+    public static final String PATH_IAM_ROLES = "/OS-ROLE/roles";
+    public static final String PATH_IAM_AGENCIES = "/OS-AGENCY";
+
+
 
     // DNS/Designate
     public static final String PATH_ZONES = "/zones";
@@ -131,15 +138,20 @@ public final class ClientConstants {
     public static final String MAGNUM_CLUSTERTEMPLATES = "/clustertemplates";
     public static final String MAGNUM_PODS = "/pods";
 
-    //FunctionGraph path
+    //FunctionGraph path V1
     public static final String FGS_PATH = "/fss/functions";
+    public static final String FGS_TRIGGERS = "/fss/triggers";
+
+    //FunctionGraph path V2
+    public static final String FGS_PATH_V2 = "/fgs/functions";
+    public static final String FGS_TRIGGERS_V2 = "/fgs/triggers";
+
     public static final String FGS_CONFIG = "/config";
     public static final String FGS_CODE = "/code";
     public static final String FGS_VERSION = "/versions";
     public static final String FGS_MARKER = "marker";
     public static final String FGS_MAXITEMS = "maxitems";
     public static final String FGS_ALIASES = "/aliases";
-    public static final String FGS_TRIGGERS = "/fss/triggers";
     public static final String FGS_INVOCATIONS = "/invocations";
     public static final String FGS_INVOCATIONS_ASYNC = "/invocations-async";
 
@@ -156,4 +168,8 @@ public final class ClientConstants {
     //micro version
     public static final String HEADER_X_OPENSTACK_NOVA_API_VERSION= "X-OpenStack-Nova-API-Version";
     public static final String HEADER_OPENSTACK_API_VERSION= "OpenStack-API-Version";
+
+    //epmanagement
+    public static final String PATH_ENTERPRISE_PROJECTS = "/enterprise-projects";
+    public static final String PATH_ENTERPRISE_PROJECT_QUOTAS = "/enterprise-projects/quotas";
 }

@@ -31,14 +31,23 @@
  * *******************************************************************************/
 package com.huawei.openstack4j.openstack.identity.internal;
 
+import static com.huawei.openstack4j.openstack.identity.internal.AKSKEndpointURLResolver.defaultServiceEndpointFile;
+
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.SortedSetMultimap;
+import com.huawei.openstack4j.api.ServiceEndpointProvider;
+import com.huawei.openstack4j.api.exceptions.ApiNotFoundException;
+import com.huawei.openstack4j.api.exceptions.OS4JException;
 import com.huawei.openstack4j.api.exceptions.RegionEndpointNotFoundException;
 import com.huawei.openstack4j.api.identity.EndpointURLResolver;
 import com.huawei.openstack4j.api.types.Facing;
@@ -47,9 +56,6 @@ import com.huawei.openstack4j.model.identity.URLResolverParams;
 import com.huawei.openstack4j.model.identity.v2.Access;
 import com.huawei.openstack4j.model.identity.v2.Endpoint;
 import com.huawei.openstack4j.model.identity.v3.Token;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Resolves an Endpoint URL based on the Service Type and Facing perspective
@@ -62,7 +68,6 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
     private static final Map<Key, String> CACHE = new ConcurrentHashMap<Key, String>();
     private static boolean LEGACY_EP_HANDLING = Boolean.getBoolean(LEGACY_EP_RESOLVING_PROP);
     private String publicHostIP;
-    
     @Override
     public String findURLV2(URLResolverParams p) {
         if (p.type == null) {
@@ -280,5 +285,4 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

@@ -49,6 +49,7 @@ import com.huawei.openstack4j.model.identity.v3.Token;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.TreeMultimap;
+import com.huawei.openstack4j.openstack.identity.v3.domain.token.AssumedBy;
 
 @JsonRootName("token")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -83,6 +84,9 @@ public class KeystoneToken implements Token {
     @JsonIgnore
     private volatile SortedSetMultimap<String, Service> aggregatedCatalog;
 
+    @JsonProperty("assumed_by")
+    private AssumedBy assumedBy;
+
     /**
      * {@inheritDoc}
      */
@@ -100,6 +104,7 @@ public class KeystoneToken implements Token {
                 .add("domain", domain)
                 .addValue("\n")
                 .add("catalog", catalog)
+                .add("assumedBy", assumedBy)
                 .toString();
     }
 
@@ -144,6 +149,11 @@ public class KeystoneToken implements Token {
     }
 
     @Override
+    public AssumedBy getAssumedBy() {
+        return assumedBy;
+    }
+
+    @Override
     public KeystoneProject getProject() {
         return project;
     }
@@ -175,6 +185,10 @@ public class KeystoneToken implements Token {
 
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
+    }
+
+    public void setCatalog(List<KeystoneService> catalog){
+        this.catalog = catalog;
     }
 
     public KeystoneToken applyContext(String endpoint, KeystoneAuth credentials) {

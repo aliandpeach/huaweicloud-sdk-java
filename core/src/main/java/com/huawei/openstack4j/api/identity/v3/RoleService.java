@@ -16,6 +16,7 @@
 package com.huawei.openstack4j.api.identity.v3;
 
 import java.util.List;
+import java.util.Map;
 
 import com.huawei.openstack4j.common.RestService;
 import com.huawei.openstack4j.model.common.ActionResponse;
@@ -66,6 +67,13 @@ public interface RoleService extends RestService {
      * @return the list<? extends role>
      */
     List<? extends Role> list();
+
+    /**
+     * Lists the global roles with filteringParams
+     *
+     * @return the list<? extends role>
+     */
+    List<? extends Role> list(Map<String, String> filteringParams);
 
     /**
      * Get details for a role
@@ -211,4 +219,14 @@ public interface RoleService extends RestService {
      * @return the ActionResponse
      */
     ActionResponse checkDomainGroupRole(String domainId, String groupId, String roleId);
+
+    /**
+     * grant a role to a specified group on all projects
+     *
+     * @param domainId the domain id
+     * @param groupId the group id
+     * @param roleId the role id
+     * @return the ActionResponse
+     */
+    ActionResponse grantGroupAllProjectsRole(String domainId, String groupId, String roleId);
 }

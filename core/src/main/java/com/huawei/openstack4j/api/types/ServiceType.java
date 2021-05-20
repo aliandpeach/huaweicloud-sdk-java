@@ -63,6 +63,7 @@ public enum ServiceType {
 	TAG_MANAGEMENT("TMS", "tag-management"),
 	VPC("VPC","vpc"),
 	VPC2("VPC","vpcv2.0"),
+	VPC3("VPC","vpcv3"),
 	EVS("EVS","evs"),
 	EVS2_1("EVS","evsv2.1"),
 	DSS("DSS","dss"),
@@ -80,7 +81,12 @@ public enum ServiceType {
 	CSBS("csbs","data-protect"),
 	CDN("cdn","cdn"),
 	FGS("fgs","fgs"),
+	FGS2_0("fgsv2","fgsv2"),
 	IAM("IAM", "iam"),
+	EPS("EPS", "eps"),
+	BSS_INTLV1("bss-intlv1","bss-intlv1"),
+    BSSV1("bssv1","bssv1"),
+    RDSV3("rdsv3", "rdsv3"),
 	UNKNOWN("NA", "NA")
 	;
 	//@on

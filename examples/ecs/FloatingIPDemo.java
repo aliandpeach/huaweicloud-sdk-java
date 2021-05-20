@@ -13,7 +13,7 @@ public class FloatingIPDemo {
 	public static void main(String[] args) {
 
 		// Using credentials for authentication
-		String authUrl = "xxxxxxxxxxxxxxxxxxxxxxxxx"; //endpoint Url
+		String authUrl = "https://iam.XXX.YYY.com/v3"; //endpoint Url
 		String user = "xxxxx"; //username
 		String password = "xxxxx"; //password
 		String projectId = "xxxxxxxxxxxxxxxxxxxxxxxxx"; //projectId
@@ -50,7 +50,7 @@ public class FloatingIPDemo {
 		}
 			
 		//specify fixedIp add EIP 
-		String fixedIp = "192.168.0.15";
+		String fixedIp = "******";
 		if(null != ip) {
 			ActionResponse rep2 = os.compute().floatingIps().addFloatingIP(server_id, fixedIp, ip.getFloatingIpAddress());
 			if (rep2.isSuccess()) {

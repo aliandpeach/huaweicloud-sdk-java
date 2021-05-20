@@ -1,5 +1,5 @@
 /*******************************************************************************
- * 	Copyright 2017 HuaWei Tld                                     
+ * 	Copyright 2017 Huawei Technologies Co., Ltd.
  * 	                                                                                 
  * 	Licensed under the Apache License, Version 2.0 (the "License"); you may not      
  * 	use this file except in compliance with the License. You may obtain a copy of    
@@ -46,14 +46,9 @@ public class AutoScalingGroupServiceImpl extends BaseAutoScalingServices impleme
 	public String create(ScalingGroupCreate group) {
 		checkArgument(group != null, "group is required");
 		checkArgument(group.getNetworks() != null && !group.getNetworks().isEmpty(), "networks is required");
-		checkArgument(group.getSecurityGroups() != null && !group.getSecurityGroups().isEmpty(),
-				"securityGroups is required");
 		checkArgument(!Strings.isNullOrEmpty(group.getVpcId()), "vpcId is required");
 		for (IdResourceEntity network : group.getNetworks()) {
 			checkArgument(!Strings.isNullOrEmpty(network.getId()), "network id is required");
-		}
-		for (IdResourceEntity securityGroup : group.getSecurityGroups()) {
-			checkArgument(!Strings.isNullOrEmpty(securityGroup.getId()), "security group id is required");
 		}
 		ASAutoScalingGroupCreate execute = post(ASAutoScalingGroupCreate.class, uri("/scaling_group")).entity(group)
 				.execute();
@@ -101,6 +96,11 @@ public class AutoScalingGroupServiceImpl extends BaseAutoScalingServices impleme
 	public ActionResponse delete(String groupId) {
 		checkArgument(!Strings.isNullOrEmpty(groupId), "group id is required");
 		return deleteWithResponse(uri("/scaling_group/%s", groupId)).execute();
+	}
+
+	public ActionResponse delete(String groupId, boolean forceDelete) {
+		checkArgument(!Strings.isNullOrEmpty(groupId), "group id is required");
+		return deleteWithResponse(uri("/scaling_group/%s", groupId)).param("force_delete", forceDelete ? "yes" : "no").execute();
 	}
 
 	@Override
